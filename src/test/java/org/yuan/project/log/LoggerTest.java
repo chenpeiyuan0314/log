@@ -31,4 +31,5 @@ public class LoggerTest {
 		log.log(Level.TRACE, "This is a trace message.");
 		log.log(Level.INFO, "This ia a info message.");
 	}
+	
 }

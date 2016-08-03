@@ -2,29 +2,16 @@ package org.yuan.project.log;
 
 import org.yuan.project.log.spi.LoggingEvent;
 
-public abstract class Appender {
+public interface Appender {
 	
-	public abstract void doAppend(LoggingEvent event);
+	void doAppend(LoggingEvent event);
+	
+	String getName();
+	
+	void setName(String name);
+	
+	Layout getLayout();
+	
+	void setLayout(Layout layout);
 
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public Layout getLayout() {
-		return layout;
-	}
-	
-	public void setLayout(Layout layout) {
-		this.layout = layout;
-	}
-	
-	//-----------------------------------------------------------------
-	//
-	//-----------------------------------------------------------------
-	private String name;
-	protected Layout layout;
 }
