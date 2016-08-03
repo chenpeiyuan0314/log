@@ -6,8 +6,16 @@ public class LoggerTest {
 
 	@Test
 	public void test() {
-		Logger log = Logger.getLogger("sole");
+		Logger root = Logger.getRootLogger();
+		Layout layout = new Layout();
+		Appender appender = new Appender();
+		appender.setLayout(layout);
+		root.addAppender(appender);
 		
-		log.log("This is a test.");
+		Appender appender2 = new Appender();
+		appender2.setLayout(layout);
+		root.addAppender(appender2);
+		
+		root.log("This is a test.");
 	}
 }
