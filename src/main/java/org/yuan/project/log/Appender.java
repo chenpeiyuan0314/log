@@ -2,12 +2,9 @@ package org.yuan.project.log;
 
 import org.yuan.project.log.spi.LoggingEvent;
 
-public class Appender {
+public abstract class Appender {
 	
-	public void doAppend(LoggingEvent event) {
-		String result = layout.format(event);
-		System.out.print(result);
-	}
+	public abstract void doAppend(LoggingEvent event);
 
 	public String getName() {
 		return name;
@@ -29,5 +26,5 @@ public class Appender {
 	//
 	//-----------------------------------------------------------------
 	private String name;
-	private Layout layout;
+	protected Layout layout;
 }

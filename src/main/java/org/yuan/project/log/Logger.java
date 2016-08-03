@@ -27,14 +27,19 @@ public class Logger {
 	Logger(String name) {
 		this.name = name;
 		appList = new ArrayList<Appender>();
+		level = Level.DEBUG;
 	}
 	
 	/**
 	 * 
 	 * @param message
 	 */
-	public void log(String message) {
-		LoggingEvent event = new LoggingEvent(message);
+	public void log(Level level, String message) {
+		if(!level.isGreaterOrEqual(this.level)) {
+			return;
+		}
+		
+		LoggingEvent event = new LoggingEvent(level, message);
 		for(Appender appender : appList) {
 			appender.doAppend(event);
 		}
@@ -57,10 +62,18 @@ public class Logger {
 		return name;
 	}
 	
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
 	//-----------------------------------------------------------------
 	// 
 	//-----------------------------------------------------------------
 	private String name;
 	private List<Appender> appList;
-	
+	private Level level;
 }
