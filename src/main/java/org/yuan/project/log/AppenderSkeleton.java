@@ -51,7 +51,7 @@ public abstract class AppenderSkeleton implements Appender, OptionHandler{
 	//-----------------------------------------------------------------
 	//
 	//-----------------------------------------------------------------
-	private String name;
+	protected String name;
 	private Level level;
 	protected Layout layout;
 }

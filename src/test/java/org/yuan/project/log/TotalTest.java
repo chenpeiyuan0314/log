@@ -9,5 +9,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	LevelTest.class,
 	SimpleLayoutTest.class,
 	LogLogTest.class,
+	HierarchyTest.class,
+	ConsoleAppenderTest.class,
+	WriterAppenderTest.class,
+	LoggerTest.class
 })
 public class TotalTest {}
