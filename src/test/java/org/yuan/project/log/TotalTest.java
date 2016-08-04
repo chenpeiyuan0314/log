@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 	LevelTest.class,
-	SimpleLayoutTest.class
+	SimpleLayoutTest.class,
+	LogLogTest.class,
 })
 public class TotalTest {}
