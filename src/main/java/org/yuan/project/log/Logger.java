@@ -3,6 +3,7 @@ package org.yuan.project.log;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yuan.project.log.spi.LoggerRepository;
 import org.yuan.project.log.spi.LoggingEvent;
 
 public class Logger {
@@ -12,7 +13,7 @@ public class Logger {
 	 * @return
 	 */
 	public static Logger getRootLogger() {
-		return new Logger("root");
+		return HIERARCHY.getRootLogger();
 	}
 	
 	/**
@@ -21,13 +22,13 @@ public class Logger {
 	 * @return
 	 */
 	public static Logger getLogger(String name) {
-		return new Logger(name);
+		return HIERARCHY.getLogger(name);
 	}
 
-	Logger(String name) {
+	protected Logger(String name) {
 		this.name = name;
 		appList = new ArrayList<Appender>();
-		level = Level.DEBUG;
+		//level = Level.DEBUG;
 	}
 	
 	/**
@@ -35,13 +36,15 @@ public class Logger {
 	 * @param message
 	 */
 	public void log(Level level, String message) {
-		if(!level.isGreaterOrEqual(this.level)) {
+		if(!level.isGreaterOrEqual(getEffectiveLevel())) {
 			return;
 		}
 		
 		LoggingEvent event = new LoggingEvent(level, message);
-		for(Appender appender : appList) {
-			appender.doAppend(event);
+		for(Logger log=this; log!=null; log=log.parent) {
+			for(Appender appender : log.appList) {
+				appender.doAppend(event);
+			}
 		}
 	}
 	
@@ -53,6 +56,15 @@ public class Logger {
 		if(!appList.contains(appender)) {
 			appList.add(appender);
 		}
+	}
+	
+	public Level getEffectiveLevel() {
+		for(Logger log = this; log != null; log = log.parent) {
+			if(log.level != null) {
+				return log.level;
+			}
+		}
+		return null;
 	}
 	
 	//-----------------------------------------------------------------
@@ -70,10 +82,16 @@ public class Logger {
 		this.level = level;
 	}
 
+	public Logger getParent() {
+		return parent;
+	}
+
 	//-----------------------------------------------------------------
 	// 
 	//-----------------------------------------------------------------
 	private String name;
 	private List<Appender> appList;
-	private Level level;
+	protected Level level;
+	protected Logger parent;
+	private static final LoggerRepository HIERARCHY = new Hierarchy();
 }
