@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.yuan.project.log.spi.LoggerRepository;
-import org.yuan.project.log.spi.RootLogger;
 
 public class Hierarchy implements LoggerRepository {
+
+	public Hierarchy(Logger root) {
+		this.root = root;
+		table = new HashMap<String,Object>();
+	}
 
 	@Override
 	public Logger getRootLogger() {
@@ -38,6 +42,45 @@ public class Hierarchy implements LoggerRepository {
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public Iterable<Logger> getCurrentLoggers() {
+		List<Logger> list = new ArrayList<Logger>();
+		for(Object obj : table.values()) {
+			if(obj instanceof Logger) {
+				list.add((Logger)obj);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public void resetConfiguration() {
+		root.setLevel(Level.DEBUG);
+		
+		synchronized(table) {
+			shutdown();
+			
+			Iterable<Logger> iter = getCurrentLoggers();
+			for(Logger log : iter) {
+				log.setLevel(null);
+			}
+		}
+	}
+
+	@Override
+	public void shutdown() {
+		root.closeNestedAppenders();
+		root.removeAllAppenders();
+		
+		synchronized(table) {
+			Iterable<Logger> list = getCurrentLoggers();
+			for(Logger item : list) {
+				item.closeNestedAppenders();
+				item.removeAllAppenders();
+			}
+		}
 	}
 
 	private void updateParent(Logger logger) {
@@ -84,6 +127,6 @@ public class Hierarchy implements LoggerRepository {
 	//--------------------------------------------------------
 	//
 	//--------------------------------------------------------
-	private Logger root = new RootLogger(Level.DEBUG);
-	private Map<String,Object> table = new HashMap<String,Object>();
+	private Logger root;
+	private Map<String,Object> table;
 }

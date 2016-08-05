@@ -30,4 +30,10 @@ public class ConsoleAppenderTest {
 		
 		appender.doAppend(event);
 	}
+	
+	@Test
+	public void testClose() {
+		appender.close();
+		appender.doAppend(event);
+	}
 }

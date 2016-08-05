@@ -14,4 +14,6 @@ public interface Appender {
 	
 	void setLayout(Layout layout);
 
+	void close();
+	
 }

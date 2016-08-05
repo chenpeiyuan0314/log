@@ -8,4 +8,10 @@ public interface LoggerRepository {
 	
 	Logger getLogger(String name);
 	
+	void resetConfiguration();
+	
+	void shutdown();
+	
+	Iterable<Logger> getCurrentLoggers();
+	
 }

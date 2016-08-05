@@ -47,7 +47,7 @@ public abstract class AppenderSkeleton implements Appender, OptionHandler{
 	public boolean isAsSevereAsThreshold(Level level) {
 		return (this.level == null) || (level.isGreaterOrEqual(this.level));
 	}
-
+	
 	//-----------------------------------------------------------------
 	//
 	//-----------------------------------------------------------------

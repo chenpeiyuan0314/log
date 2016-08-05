@@ -76,4 +76,46 @@ public class LoggerTest {
 		Assert.assertEquals(level, abc.getEffectiveLevel());
 	}
 	
+	@Test
+	public void testGetRootLogger() {
+		Assert.assertEquals(Logger.getRootLogger(), Logger.getRootLogger());
+	}
+	
+	@Test
+	public void testGetLogger() {
+		Logger none = Logger.getLogger("none");
+		Assert.assertNotNull(none);
+		Assert.assertNull(none.getLevel());
+	}
+	
+	@Test
+	public void testAddAppender() {
+		LogManager.shutdown();
+		
+		Logger test = Logger.getLogger("test");
+		Appender appender = new ConsoleAppender();
+		test.addAppender(appender);
+		
+		Assert.assertEquals(1, count(test.getAllAppenders()));
+	}
+	
+	@Test
+	public void testAppender() {
+		LogManager.shutdown();
+		
+		Logger test = Logger.getLogger("test");
+		Appender appender = new ConsoleAppender();
+		test.addAppender(appender);
+		test.removeAllAppenders();
+		
+		Assert.assertEquals(0, count(test.getAllAppenders()));
+	}
+	
+	private int count(Iterable<?> iter) {
+		int sum = 0;
+		for(Object obj : iter) {
+			sum++;
+		}
+		return sum;
+	}
 }

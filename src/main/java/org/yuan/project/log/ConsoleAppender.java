@@ -1,10 +1,11 @@
 package org.yuan.project.log;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 
-import org.yuan.project.log.spi.LoggingEvent;
+import org.yuan.project.log.kit.QuietWriter;
 
-public class ConsoleAppender extends AppenderSkeleton {
+public class ConsoleAppender extends WriterAppender {
 	public static final String SYSTEM_OUT = "System.out";
 	public static final String SYSTEM_ERR = "System.err";
 	
@@ -21,18 +22,16 @@ public class ConsoleAppender extends AppenderSkeleton {
 	}
 
 	@Override
-	public void append(LoggingEvent event) {
-		ps.print(layout.format(event));
+	public void activateOptions() {
+		if(target.equals(SYSTEM_OUT)) {
+			qw = new QuietWriter(new OutputStreamWriter(System.out));
+		} else {
+			qw = new QuietWriter(new OutputStreamWriter(System.err));
+		}
 	}
 	
 	@Override
-	public void activateOptions() {
-		if(target.equals(SYSTEM_OUT)) {
-			ps = System.out;
-		} else {
-			ps = System.err;
-		}
-	}
+	protected void closeWriter() {}
 
 	public String getTarget() {
 		return target;
@@ -46,5 +45,4 @@ public class ConsoleAppender extends AppenderSkeleton {
 	//
 	//-----------------------------------------------------------------
 	private String target;
-	private PrintStream ps;
 }

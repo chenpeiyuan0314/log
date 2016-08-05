@@ -3,7 +3,6 @@ package org.yuan.project.log;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.yuan.project.log.spi.LoggerRepository;
 import org.yuan.project.log.spi.LoggingEvent;
 
 public class Logger {
@@ -13,7 +12,7 @@ public class Logger {
 	 * @return
 	 */
 	public static Logger getRootLogger() {
-		return HIERARCHY.getRootLogger();
+		return LogManager.getRootLogger();
 	}
 	
 	/**
@@ -22,13 +21,12 @@ public class Logger {
 	 * @return
 	 */
 	public static Logger getLogger(String name) {
-		return HIERARCHY.getLogger(name);
+		return LogManager.getLogger(name);
 	}
 
 	protected Logger(String name) {
 		this.name = name;
 		appList = new ArrayList<Appender>();
-		//level = Level.DEBUG;
 	}
 	
 	/**
@@ -58,6 +56,14 @@ public class Logger {
 		}
 	}
 	
+	public void removeAllAppenders() {
+		appList.clear();
+	}
+	
+	public Iterable<Appender> getAllAppenders() {
+		return appList;
+	}
+	
 	public Level getEffectiveLevel() {
 		for(Logger log = this; log != null; log = log.parent) {
 			if(log.level != null) {
@@ -65,6 +71,13 @@ public class Logger {
 			}
 		}
 		return null;
+	}
+	
+	public void closeNestedAppenders() {
+		Iterable<Appender> list = getAllAppenders();
+		for(Appender item : list) {
+			item.close();
+		}
 	}
 	
 	//-----------------------------------------------------------------
@@ -93,5 +106,5 @@ public class Logger {
 	private List<Appender> appList;
 	protected Level level;
 	protected Logger parent;
-	private static final LoggerRepository HIERARCHY = new Hierarchy();
+	//private LoggerRepository hierarchy;
 }

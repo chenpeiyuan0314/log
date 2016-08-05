@@ -46,6 +46,7 @@ public class WriterAppender extends AppenderSkeleton {
 		}
 	}
 	
+	@Override
 	public void close() {
 		if(closed) {
 			return;
@@ -105,6 +106,6 @@ public class WriterAppender extends AppenderSkeleton {
 	//--------------------------------------------------------
 	private String encoding;
 	private boolean immediateFlush = true;
-	private QuietWriter qw;
+	protected QuietWriter qw;
 	private boolean closed;
 }

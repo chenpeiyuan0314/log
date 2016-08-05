@@ -8,7 +8,7 @@ public class RootLogger extends Logger {
 	
 	public RootLogger(Level level) {
 		super("root");
-		this.level = level;
+		setLevel(level);
 	}
 
 	@Override
