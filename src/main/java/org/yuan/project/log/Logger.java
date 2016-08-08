@@ -38,7 +38,7 @@ public class Logger {
 			return;
 		}
 		
-		LoggingEvent event = new LoggingEvent(level, message);
+		LoggingEvent event = new LoggingEvent(this, level, message);
 		for(Logger log=this; log!=null; log=log.parent) {
 			for(Appender appender : log.appList) {
 				appender.doAppend(event);

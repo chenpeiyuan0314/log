@@ -10,20 +10,22 @@ import org.yuan.project.pattern.PatternParser;
 
 public class EnhancedPatternLayout extends Layout {
 	
+	public static final String DEFAULT_CONVERSION_PATTERN = "%m%n";
+	
 	public EnhancedPatternLayout() {
-		patternConverters = new ArrayList<PatternConverter>();
-		formattingInfos = new ArrayList<FormattingInfo>();
+		this(DEFAULT_CONVERSION_PATTERN);
 	}
 
 	public EnhancedPatternLayout(String pattern) {
-		this.pattern = pattern;
+		patternConverters = new ArrayList<PatternConverter>();
+		formattingInfos = new ArrayList<FormattingInfo>();
+		pattern = pattern == null ? DEFAULT_CONVERSION_PATTERN : pattern;
+		setConversionPattern(pattern);
 	}
 
 	@Override
 	public String format(LoggingEvent event) {
 		StringBuffer sb = new StringBuffer();
-		PatternParser.parse(pattern, patternConverters, formattingInfos, PatternParser.getPatternLayoutRules());
-		
 		int len = Integer.min(patternConverters.size(), formattingInfos.size());
 		int beg = 0;
 		for(int i=0; i<len; i++) {
@@ -41,6 +43,9 @@ public class EnhancedPatternLayout extends Layout {
 
 	public void setConversionPattern(String pattern) {
 		this.pattern = pattern;
+		formattingInfos.clear();
+		patternConverters.clear();
+		PatternParser.parse(pattern, patternConverters, formattingInfos, PatternParser.getPatternLayoutRules());
 	}
 	
 	/*

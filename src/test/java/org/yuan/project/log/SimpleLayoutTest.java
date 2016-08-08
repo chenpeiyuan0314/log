@@ -8,7 +8,7 @@ public class SimpleLayoutTest {
 
 	@Test
 	public void testFormat() {
-		LoggingEvent event = new LoggingEvent(Level.INFO, "This is a info message.");
+		LoggingEvent event = new LoggingEvent(Logger.getRootLogger(), Level.INFO, "This is a info message.");
 		Layout layout = new SimpleLayout();
 		String msg = layout.format(event);
 		

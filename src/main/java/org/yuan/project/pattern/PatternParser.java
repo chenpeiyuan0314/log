@@ -22,11 +22,29 @@ public final class PatternParser {
 	
 	static {
 		PATTERN_LAYOUT_RULES = new HashMap<String,Object>();
+		PATTERN_LAYOUT_RULES.put("c", LoggerPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("C", ClassNamePatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("F", FileLocationPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("L", LineLocationPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("M", MethodLocationPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("l", FullLocationPatternConverter.class);
+		
 		PATTERN_LAYOUT_RULES.put("m", MessagePatternConverter.class);
 		PATTERN_LAYOUT_RULES.put("message", MessagePatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("p", LevelPatternConverter.class);
 		PATTERN_LAYOUT_RULES.put("level", LevelPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("r", RelativeTimePatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("t", ThreadPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("d", DatePatternConverter.class);
 		
 		FILENAME_PATTERN_RULES = new HashMap<String,Object>();
 	}
@@ -51,7 +69,7 @@ public final class PatternParser {
 		while(i < pattern.length()) {
 			char ch = pattern.charAt(i++);
 			
-			switch(ch) {
+			switch(state) {
 			case LIT_STATE:
 				if(i == pattern.length()) {
 					literal.append(ch);
@@ -145,17 +163,17 @@ public final class PatternParser {
 				
 				break;
 			}
-			
-			if(literal.length() != 0) {
-				patternConverters.add(new LiteralPatternConverter(literal.toString()));
-				formattingInfos.add(new FormattingInfo());
-			}
+		}
+		
+		if(literal.length() != 0) {
+			patternConverters.add(new LiteralPatternConverter(literal.toString()));
+			formattingInfos.add(new FormattingInfo());
 		}
 	}
 	
 	private static int finalizeConverter(char ch, String pattern, int i, StringBuffer buf, FormattingInfo fmtInfo, 
 		Map<String,Object> rules, List<PatternConverter> patternConverters, List<FormattingInfo> formattingInfos) {
-		Class<?> converterClass = (Class<?>)rules.get(ch);
+		Class<?> converterClass = (Class<?>)rules.get(String.valueOf(ch));
 		
 		if(converterClass == null) {
 			return i;
@@ -168,6 +186,8 @@ public final class PatternParser {
 		} catch(Exception e) {
 			LogLog.error(e.getMessage());
 		}
+		
+		buf.setLength(0);
 		
 		return i;
 	}

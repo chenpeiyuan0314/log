@@ -10,7 +10,7 @@ public class ConsoleAppenderTest {
 	
 	@Before
 	public void before() {
-		event = new LoggingEvent(Level.INFO, "This is a info message.");
+		event = new LoggingEvent(Logger.getRootLogger(), Level.INFO, "This is a info message.");
 		appender = new ConsoleAppender(new SimpleLayout());
 	}
 	
