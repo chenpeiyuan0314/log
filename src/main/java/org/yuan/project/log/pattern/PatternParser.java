@@ -1,4 +1,4 @@
-package org.yuan.project.pattern;
+package org.yuan.project.log.pattern;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
