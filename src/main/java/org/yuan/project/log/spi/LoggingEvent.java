@@ -10,9 +10,16 @@ public class LoggingEvent {
 		this.level = level;
 		this.message = message;
 		this.timeStamp = System.currentTimeMillis();
-		this.locationInfo = new LocationInfo(new Throwable(), LoggingEvent.class.getName());
+		this.locationInfo = new LocationInfo(new Throwable(), className);
 	}
 
+	public LoggingEvent(Logger logger, Level level, String message, long timeStamp) {
+		this.logger = logger;
+		this.level = level;
+		this.message = message;
+		this.timeStamp = timeStamp;
+		this.locationInfo = new LocationInfo(new Throwable(), className);
+	}
 	
 	public String getMessage() {
 		return message;
@@ -56,4 +63,5 @@ public class LoggingEvent {
 	private LocationInfo locationInfo;
 	
 	private static long startTime = System.currentTimeMillis();
+	private static String className = LoggingEvent.class.getName();
 }

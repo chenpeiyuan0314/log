@@ -4,7 +4,9 @@ import org.yuan.project.log.spi.LoggingEvent;
 
 public class MessagePatternConverter extends PatternConverter {
 	
-	public MessagePatternConverter() {}
+	public MessagePatternConverter(String[] options) {
+		super(options);
+	}
 
 	@Override
 	public void format(LoggingEvent event, StringBuffer sbuf) {

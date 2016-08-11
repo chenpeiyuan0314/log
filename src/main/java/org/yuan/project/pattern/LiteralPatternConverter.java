@@ -5,6 +5,7 @@ import org.yuan.project.log.spi.LoggingEvent;
 public class LiteralPatternConverter extends PatternConverter {
 	
 	public LiteralPatternConverter(String literal) {
+		super(null);
 		this.literal = literal;
 	}
 

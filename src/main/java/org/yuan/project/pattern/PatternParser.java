@@ -1,5 +1,6 @@
 package org.yuan.project.pattern;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +181,11 @@ public final class PatternParser {
 		}
 		
 		try {
-			PatternConverter pc = (PatternConverter)converterClass.newInstance();
+			StringBuffer sbuf = new StringBuffer();
+			i = extractOptions(pattern, i, sbuf);
+			Constructor<?> constructor = converterClass.getConstructor(String[].class);
+			PatternConverter pc = (PatternConverter)constructor.newInstance((Object)new String[]{sbuf.toString()});
+			//PatternConverter pc = (PatternConverter)converterClass.newInstance();
 			patternConverters.add(pc);
 			formattingInfos.add(fmtInfo);
 		} catch(Exception e) {
@@ -190,5 +195,18 @@ public final class PatternParser {
 		buf.setLength(0);
 		
 		return i;
+	}
+	
+	private static int extractOptions(String pattern, int i, StringBuffer sbuf) {
+		int beg = pattern.indexOf("{", i);
+		if(beg == -1) {
+			return i;
+		}
+		int end = pattern.indexOf("}", beg + 1);
+		if(end == -1) {
+			return i;
+		}
+		sbuf.append(pattern.substring(beg + 1, end));
+		return end + 1;
 	}
 }

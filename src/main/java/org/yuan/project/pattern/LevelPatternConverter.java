@@ -4,7 +4,9 @@ import org.yuan.project.log.spi.LoggingEvent;
 
 public class LevelPatternConverter extends PatternConverter {
 	
-	public LevelPatternConverter() {}
+	public LevelPatternConverter(String[] options) {
+		super(options);
+	}
 
 	@Override
 	public void format(LoggingEvent event, StringBuffer sbuf) {
