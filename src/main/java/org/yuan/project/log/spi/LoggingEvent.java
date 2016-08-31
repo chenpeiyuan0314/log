@@ -1,7 +1,12 @@
 package org.yuan.project.log.spi;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.yuan.project.log.Level;
 import org.yuan.project.log.Logger;
+import org.yuan.project.log.MDC;
+import org.yuan.project.log.NDC;
 
 public class LoggingEvent {
 	
@@ -51,7 +56,23 @@ public class LoggingEvent {
 	public LocationInfo getLocationInfo() {
 		return locationInfo;
 	}
-
+	
+	public String getNDC() {
+		return NDC.get();
+	}
+	
+	public Object getMDC(String key) {
+		return MDC.get(key);
+	}
+	
+	public Map<String,Object> getProperties() {
+		return Collections.unmodifiableMap(MDC.getContext());
+	}
+	
+	public ThrowableInfo getThrowableInfo() {
+		return throwableInfo;
+	}
+ 
 	//-----------------------------------------------------------------
 	//
 	//-----------------------------------------------------------------
@@ -61,6 +82,7 @@ public class LoggingEvent {
 	private String threadName;
 	private long timeStamp;
 	private LocationInfo locationInfo;
+	private ThrowableInfo throwableInfo;
 	
 	private static long startTime = System.currentTimeMillis();
 	private static String className = LoggingEvent.class.getName();

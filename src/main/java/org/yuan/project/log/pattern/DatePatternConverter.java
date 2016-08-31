@@ -8,7 +8,6 @@ import org.yuan.project.log.spi.LoggingEvent;
 public class DatePatternConverter extends PatternConverter {
 	
 	public DatePatternConverter(String[] options) {
-		super(options);
 		if(options.length > 0) {
 			sdf = new SimpleDateFormat(options[0]);
 			return;
@@ -21,5 +20,9 @@ public class DatePatternConverter extends PatternConverter {
 		sbuf.append(sdf.format(new Date(event.getTimeStamp())));
 	}
 
+	public static PatternConverter getInstance(String[] option) {
+		return new DatePatternConverter(option);
+	}
+	
 	private SimpleDateFormat sdf;
 }

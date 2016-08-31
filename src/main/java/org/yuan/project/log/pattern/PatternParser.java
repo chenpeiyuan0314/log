@@ -24,14 +24,19 @@ public final class PatternParser {
 	static {
 		PATTERN_LAYOUT_RULES = new HashMap<String,Object>();
 		PATTERN_LAYOUT_RULES.put("c", LoggerPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("logger", LoggerPatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("C", ClassNamePatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("class", ClassNamePatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("F", FileLocationPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("file", FileLocationPatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("L", LineLocationPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("line", LineLocationPatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("M", MethodLocationPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("method", MethodLocationPatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("l", FullLocationPatternConverter.class);
 		
@@ -42,12 +47,30 @@ public final class PatternParser {
 		PATTERN_LAYOUT_RULES.put("level", LevelPatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("r", RelativeTimePatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("relative", RelativeTimePatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("t", ThreadPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("thread", ThreadPatternConverter.class);
 		
 		PATTERN_LAYOUT_RULES.put("d", DatePatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("date", DatePatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("x", NDCPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("ndc", NDCPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("X", PropertiesPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("properties", PropertiesPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("sn", SequenceNumberPatternConverter.class);
+		PATTERN_LAYOUT_RULES.put("sequenceNumber", SequenceNumberPatternConverter.class);
+		
+		PATTERN_LAYOUT_RULES.put("throwable", ThrowableInfomationPatternConverter.class);
 		
 		FILENAME_PATTERN_RULES = new HashMap<String,Object>();
+		FILENAME_PATTERN_RULES.put("d", FileDatePatternConverter.class);
+		FILENAME_PATTERN_RULES.put("date", FileDatePatternConverter.class);
+		FILENAME_PATTERN_RULES.put("i", IntegerPatternConverter.class);
+		FILENAME_PATTERN_RULES.put("index", IntegerPatternConverter.class);
 	}
 	
 	private PatternParser() {}
@@ -208,5 +231,28 @@ public final class PatternParser {
 		}
 		sbuf.append(pattern.substring(beg + 1, end));
 		return end + 1;
+	}
+	
+	private static int extractConverter(char last, String pattern, int i, StringBuffer sbuf, StringBuffer literal) {
+		sbuf.setLength(0);
+		
+		if(!Character.isUnicodeIdentifierStart(last)) {
+			return i;
+		}
+		
+		sbuf.append(last);
+		
+		while(i < pattern.length()) {
+			char ch = pattern.charAt(i);
+			if(!Character.isUnicodeIdentifierPart(ch)) {
+				break;
+			}
+			
+			sbuf.append(ch);
+			literal.append(ch);
+			i++;
+		}
+		
+		return i;
 	}
 }

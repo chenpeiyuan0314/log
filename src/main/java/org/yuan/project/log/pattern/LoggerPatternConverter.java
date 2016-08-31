@@ -4,13 +4,16 @@ import org.yuan.project.log.spi.LoggingEvent;
 
 public class LoggerPatternConverter extends PatternConverter {
 	
-	public LoggerPatternConverter(String[] options) {
-		super(options);
-	}
+	public LoggerPatternConverter() {}
 
 	@Override
 	public void format(LoggingEvent event, StringBuffer sbuf) {
 		sbuf.append(event.getLoggerName());
 	}
+	
+	public static PatternConverter getInstance(String[] option) {
+		return INSTANCE;
+	}
 
+	private static final PatternConverter INSTANCE = new LoggerPatternConverter();
 }
