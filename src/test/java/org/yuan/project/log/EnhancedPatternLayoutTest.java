@@ -48,4 +48,5 @@ public class EnhancedPatternLayoutTest {
 		System.out.print(fmt);
 		//Assert.assertEquals("15 main - This is a test." + Layout.LINE_SEP, fmt);
 	}
+	
 }
